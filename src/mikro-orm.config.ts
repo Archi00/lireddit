@@ -1,7 +1,7 @@
 import { __prod__ } from './constants';
 import { Post } from './entities/Post';
 import { MikroORM } from '@mikro-orm/core';
-import { password } from '../password';
+import { password } from '../gitignore/password';
 
 export default {
   entities: [Post],
