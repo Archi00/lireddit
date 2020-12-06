@@ -7,7 +7,7 @@ const constants_1 = require("./constants");
 const Post_1 = require("./entities/Post");
 const password_1 = require("../gitignore/password");
 const path_1 = __importDefault(require("path"));
-console.log('dirname', __dirname);
+const port_1 = require("../gitignore/port");
 exports.default = {
     migrations: {
         path: path_1.default.join(__dirname, './migrations'),
@@ -17,6 +17,7 @@ exports.default = {
     dbName: 'lireddit',
     password: password_1.password,
     type: 'postgresql',
+    port: port_1.port,
     debug: !constants_1.__prod__,
 };
 //# sourceMappingURL=mikro-orm.config.js.map
