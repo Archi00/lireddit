@@ -4,6 +4,7 @@ import { MikroORM } from '@mikro-orm/core';
 import { password } from '../gitignore/password';
 import path from 'path';
 import { port } from '../gitignore/port';
+
 export default {
   migrations: {
     path: path.join(__dirname, './migrations'),
