@@ -2,8 +2,14 @@ import { __prod__ } from './constants';
 import { Post } from './entities/Post';
 import { MikroORM } from '@mikro-orm/core';
 import { password } from '../gitignore/password';
+import path from 'path';
 
+console.log('dirname', __dirname);
 export default {
+  migrations: {
+    path: path.join(__dirname, './migrations'),
+    pattern: /^[\w-]+\d+\.[tj]s$/,
+  },
   entities: [Post],
   dbName: 'lireddit',
   password: password,
