@@ -27,7 +27,7 @@ const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const secret_1 = require("../gitignore/secret");
 const RedisStore = connect_redis_1.default(express_session_1.default);
-const redisClient = redis_1.default.createClient();
+const redisClient = redis_1.default.createClient({ port: 6379 });
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const orm = yield core_1.MikroORM.init(mikro_orm_config_1.default);
     yield orm.getMigrator().up();
@@ -43,13 +43,14 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         },
         secret: secret_1.secret,
         resave: false,
+        saveUninitialized: false,
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield type_graphql_1.buildSchema({
             resolvers: [hello_1.HelloResolver, post_1.PostResolver, user_1.UserResolver],
             validate: false,
         }),
-        context: () => ({ em: orm.em }),
+        context: ({ req, res }) => ({ em: orm.em, req, res }),
     });
     apolloServer.applyMiddleware({ app });
     app.listen(5000, () => {

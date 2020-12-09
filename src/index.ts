@@ -12,9 +12,10 @@ import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { secret } from '../gitignore/secret';
+import { MyContext } from './types';
 
 const RedisStore = connectRedis(session);
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({ port: 6379 });
 
 const main = async () => {
   const orm = await MikroORM.init(MicroConfig);
@@ -34,6 +35,7 @@ const main = async () => {
       },
       secret: secret,
       resave: false,
+      saveUninitialized: false,
     })
   );
 
@@ -42,7 +44,7 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: () => ({ em: orm.em }),
+    context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
   });
 
   apolloServer.applyMiddleware({ app });
