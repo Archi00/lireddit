@@ -75,7 +75,7 @@ let UserResolver = class UserResolver {
                     errors: [
                         {
                             field: 'username',
-                            message: 'Username must be longer than 2 characters',
+                            message: 'Username must be greater than 2 characters',
                         },
                     ],
                 };
@@ -85,7 +85,7 @@ let UserResolver = class UserResolver {
                     errors: [
                         {
                             field: 'password',
-                            message: 'Password must be longer than 2 characters',
+                            message: 'Password must be greater than 2 characters',
                         },
                     ],
                 };
@@ -95,7 +95,21 @@ let UserResolver = class UserResolver {
                 username: options.username,
                 password: hashedPassword,
             });
-            yield em.persistAndFlush(user);
+            try {
+                yield em.persistAndFlush(user);
+            }
+            catch (err) {
+                if (err.code === '23505') {
+                    return {
+                        errors: [
+                            {
+                                field: 'username',
+                                message: 'Username already exists',
+                            },
+                        ],
+                    };
+                }
+            }
             return { user };
         });
     }
